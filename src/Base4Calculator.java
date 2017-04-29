@@ -10,9 +10,13 @@ public class Base4Calculator {
 	}
 
 	private static void createAndShowGUI() {
+		Base4CalcState calc=new Base4CalcState();
+		Base4Panel panel=new Base4Panel(calc);
+		calc.addObserver(panel);
+		
 		JFrame frame = new JFrame("Base 4 Calculator");
 
-		frame.add(new Base4Panel());
+		frame.add(panel);
 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(400, 400);

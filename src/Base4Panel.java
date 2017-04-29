@@ -4,6 +4,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -13,7 +15,7 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class Base4Panel extends JPanel {
+public class Base4Panel extends JPanel implements Observer {
 	/**
 	 * 
 	 */
@@ -41,12 +43,13 @@ public class Base4Panel extends JPanel {
 
 	String displayText;
 
-	Base4Panel() {
+	Base4Panel(Base4CalcState cal) {
 		
 		display = new JLabel();
 		operation = new ArrayList<JButton>();
 		values = new ArrayList<JButton>();
-		calc = new Base4CalcState();
+		calc=cal;
+		//calc = new Base4CalcState();
 		mode = new CalculatorModel();
 
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -95,9 +98,10 @@ public class Base4Panel extends JPanel {
 				// System.out.println("current base is" + currentBase);
 				updateButtons(currentBase);
 				calc.setBase(currentBase);
-				if (postOperAction)
-					display.setText(calc.currentValue());
-			}
+				if (postOperAction){
+					//display.setText(calc.currentValue());
+				}
+				}
 		});
 
 		sliderPanel.add(baseSlider);
@@ -165,11 +169,11 @@ public class Base4Panel extends JPanel {
 						postOperAction = true;
 						operCounter++;
 						if (operCounter > 1) {
-							System.out.println(calc.currentValue());
+							//System.out.println(calc.currentValue());
 							System.out.println(mode.toString());
 							calc.getInput(mode, currentBase);
-							display.setText(calc.currentValue());
-							mode.setParameterA(calc.currentValue());
+							//display.setText(calc.currentValue());
+							//mode.setParameterA(calc.currentValue());
 							mode.setOper1(mode.getCurrentoper());
 						} else {
 							// calc.setup();
@@ -193,7 +197,7 @@ public class Base4Panel extends JPanel {
 						mode.setParameterB(display.getText());
 						// currentoper=operation.get(i).getText();
 						calc.getInput(mode, currentBase);
-						display.setText(calc.currentValue());
+						//display.setText(calc.currentValue());
 						operCounter = 0;
 						postOperAction = true;
 					}
@@ -206,5 +210,11 @@ public class Base4Panel extends JPanel {
 			// it doesn't
 
 		}
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		display.setText(((Base4CalcState)o).getValue());	
+		
 	}
 }

@@ -1,4 +1,6 @@
-public class Base4CalcState {
+import java.util.Observable;
+
+public class Base4CalcState extends Observable {
 	private int value; // value of current calculation
 	private int currentBase;
 	// calculatorModel mode;
@@ -21,6 +23,8 @@ public class Base4CalcState {
 		currentBase = base;
 		value = Calculator.calculate(Integer.parseInt(mode.getParameterA(), currentBase),
 				Integer.parseInt(mode.getParameterB(), currentBase), mode.getOper1());
+		
+		setValue(currentValue());
 	}
 
 	int getBase() {
@@ -30,5 +34,13 @@ public class Base4CalcState {
 	void setBase(int base) {
 		currentBase = base;
 	}
+	private String val;
+	void setValue(String val){
+		this.val=val;
+		setChanged();
+	    notifyObservers();
+	}
+	
+	String getValue(){return val;}
 
 }
