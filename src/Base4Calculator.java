@@ -13,7 +13,7 @@ public class Base4Calculator {
 		Base4CalcState calc=new Base4CalcState();
 		Base4Panel panel=new Base4Panel(calc);
 		calc.addObserver(panel);
-		
+		calc.setup();
 		JFrame frame = new JFrame("Base 4 Calculator");
 
 		frame.add(panel);
