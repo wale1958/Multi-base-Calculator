@@ -3,9 +3,8 @@ import java.util.Observable;
 public class Base4CalcState extends Observable {
 	private int value; // value of current calculation
 	private int currentBase;
-	private String equation="0";
-	private boolean firstTime=true;
-	// calculatorModel mode;
+	private String equation = "0";
+	private boolean firstTime = true;
 
 	Base4CalcState() {
 		value = 0;
@@ -16,42 +15,38 @@ public class Base4CalcState extends Observable {
 	void clear() {
 		value = 0;
 	}
-	
-	void setup(){
+
+	void setup() {
 		setChanged();
-	    notifyObservers();
+		notifyObservers();
 	}
-	
-	void receiveKeyValue(String key){
+
+	void receiveKeyValue(String key) {
 		System.out.println(key + "===" + equation);
-		if(!(key.equals("0") && equation.equals("0"))){
-			if(firstTime){
-				//resetDisplay();
-				equation="";
-				firstTime=false;
+		if (!(key.equals("0") && equation.equals("0"))) {
+			if (firstTime) {
+				equation = "";
+				firstTime = false;
 			}
-			equation= equation+key;
+			equation = equation + key;
 			setChanged();
-		    notifyObservers();
+			notifyObservers();
 		}
 	}
-	
-	void resetDisplay(){
-	//if(firstTime){
-	//	equation="";
-	//}
-	//else{
-		equation="0"; 
-	//}
-	firstTime=true; 
-	setChanged();
-    notifyObservers();
-    }
-	
-	String getEquation(){return equation;}
-	
+
+	void resetDisplay() {
+		equation = "0";
+		firstTime = true;
+		setChanged();
+		notifyObservers();
+	}
+
+	String getEquation() {
+		return equation;
+	}
+
 	String currentValue() {
-		
+
 		return Integer.toString(value, currentBase);
 	}
 
@@ -60,7 +55,7 @@ public class Base4CalcState extends Observable {
 		value = calculate(Integer.parseInt(mode.getParameterA(), currentBase),
 				Integer.parseInt(mode.getParameterB(), currentBase), mode.getOper1());
 		setChanged();
-	    notifyObservers();
+		notifyObservers();
 	}
 
 	int getBase() {
@@ -70,24 +65,23 @@ public class Base4CalcState extends Observable {
 	void setBase(int base) {
 		currentBase = base;
 		setChanged();
-	    notifyObservers();
+		notifyObservers();
 	}
-	
-	String getValue(){return currentValue();}
 
-	public static int calculate (int input1, int input2, String operation){
-		if(operation == "+"){
-			return input1+input2;
-			}
-		else if(operation =="-"){
-			return input1-input2;
-		}
-		else if(operation =="*"){
-			return input1*input2;
-		}
-		else
-			return input1/input2;
+	String getValue() {
+		return currentValue();
+	}
 
-			
+	public static int calculate(int input1, int input2, String operation) {
+		if (operation == "+") {
+			return input1 + input2;
+		} else if (operation == "-") {
+			return input1 - input2;
+		} else if (operation == "*") {
+			return input1 * input2;
+		} else{
+			return input1 / input2;
 		}
+
+	}
 }
