@@ -153,7 +153,8 @@ public class Base4Panel extends JPanel implements Observer {
 						showValue = true;
 						System.out.println(display.getText());
 						System.out.println(currentBase);
-						mode.setParameterB(display.getText());
+						//mode.setParameterB(display.getText());
+						mode.setParameterB(calc.getEquation());
 						mode.setCurrentoper(operation.get(i).getText());
 
 						System.out.println("+");
@@ -162,7 +163,7 @@ public class Base4Panel extends JPanel implements Observer {
 						if (operCounter > 1) {
 							System.out.println(mode.toString());
 							calc.getInput(mode, currentBase);
-							mode.setParameterA(calc.currentValue());
+							mode.setParameterA(calc.getValue());
 							mode.setOper1(mode.getCurrentoper());
 						} else {
 							mode.setParameterA(mode.getParameterB());
@@ -183,9 +184,8 @@ public class Base4Panel extends JPanel implements Observer {
 						System.out.println("=");
 						showValue = true;
 						operCounter++;
-						mode.setParameterB(display.getText());
+						mode.setParameterB(calc.getEquation());
 						calc.getInput(mode, currentBase);
-						operCounter = 0;
 						postOperAction = true;
 					}
 				}
