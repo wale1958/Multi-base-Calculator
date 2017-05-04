@@ -18,7 +18,8 @@ import javax.swing.event.ChangeListener;
 /**
  * Base4Panel functions as the view of this project. It declares the buttons,
  * Label, Slider, calculator model and it's observable {@link Base4CalcState}.
- * It is responsible for the layout and the display of the calculator.
+ * It is responsible for the layout and the display of the calculator. Has an
+ * inner class {@link ButtonListener}
  * 
  * 
  * @author Adebowale Ojetola
@@ -32,7 +33,6 @@ public class Base4Panel extends JPanel implements Observer {
 																		// subclass
 																		// of
 																		// JPanel
-
 	public static final int defaultBase = 10;
 	public static final int maxBase = 16;
 	public static final int minBase = 2;
@@ -84,13 +84,13 @@ public class Base4Panel extends JPanel implements Observer {
 		operation.add(new JButton("="));
 
 		for (int i = 0; i < operation.size(); i++) {
-			operation.get(i).addActionListener(new buttonListener());
+			operation.get(i).addActionListener(new ButtonListener());
 			buttonLayout.add(operation.get(i));
 		}
 
 		for (int i = 0; i < maxBase; i++) {
 			JButton temp = new JButton(Integer.toHexString(i).toUpperCase());
-			temp.addActionListener(new buttonListener());
+			temp.addActionListener(new ButtonListener());
 			values.add(temp);
 			buttonLayout.add(temp);
 		}
@@ -170,7 +170,7 @@ public class Base4Panel extends JPanel implements Observer {
 	 * @since 1.0
 	 *
 	 */
-	class buttonListener implements ActionListener {
+	class ButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 
 			for (int i = 0; i < values.size(); i++) {
