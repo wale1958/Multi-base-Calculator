@@ -224,9 +224,13 @@ public class Base4Panel extends JPanel implements Observer {
 												// on the operations rather than
 												// the '=' button. For example
 												// "2++" displays "4" as the
-												// output in base 10. Another example is
-												// "8-2--" and that displays "4" as
-												// the output in base 10. This feature does not work on the '=' button.
+												// output in base 10. Another
+												// example is
+												// "8-2--" and that displays "4"
+												// as
+												// the output in base 10. This
+												// feature does not work on the
+												// '=' button.
 							calc.getInput(mode, currentBase);// send both inputs
 																// and the
 																// currentBase
