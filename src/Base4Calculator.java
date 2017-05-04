@@ -25,13 +25,14 @@ public class Base4Calculator {
 
 	/**
 	 * starts up Base4CalcState and Base4Panel adds Base4Panel as an observer to
-	 * Base4CalcState. It also creates a JFrame and adds the Base4Panel variable to it.
+	 * Base4CalcState. It also creates a JFrame and adds the Base4Panel variable
+	 * to it.
 	 */
 	private static void createAndShowGUI() {
 		Base4CalcState calc = new Base4CalcState();
 		Base4Panel panel = new Base4Panel(calc);
 		calc.addObserver(panel);
-		calc.setup(); //update panel
+		calc.setup(); // update panel
 		JFrame frame = new JFrame("Base 4 Calculator");
 
 		frame.add(panel);
