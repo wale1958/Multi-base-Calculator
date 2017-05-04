@@ -8,8 +8,8 @@ import java.util.Observable;
  * <li>The value of the most recent calculation made.
  * </ul>
  * <p>
- * Base4CalcState extends the Observable class and updates the
- * Observer {@link Base4Panel} whenever either of the value it holds changes.
+ * Base4CalcState extends the Observable class and updates the Observer
+ * {@link Base4Panel} whenever either of the value it holds changes.
  * 
  * 
  * 
@@ -60,7 +60,6 @@ public class Base4CalcState extends Observable {
 	 *            contains the value of the Integer button clicked.
 	 */
 	void receiveKeyValue(String key) {
-		System.out.println(key + "===" + equation);
 		if (!(key.equals("0") && equation.equals("0"))) { // if key and equation
 															// both don't hold
 															// the value zero
@@ -137,9 +136,9 @@ public class Base4CalcState extends Observable {
 	 * Does the calculation in integer
 	 * 
 	 * @param input1
-	 *            holds the first input the user clicked 
+	 *            holds the first input the user clicked
 	 * @param input2
-	 *            holds the second input the user clicked 
+	 *            holds the second input the user clicked
 	 * @param operation
 	 *            holds the operation to be performed between the two inputs
 	 * @return the result of the calculation

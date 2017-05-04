@@ -185,7 +185,6 @@ public class Base4Panel extends JPanel implements Observer {
 																		// button
 																		// was
 																		// clicked
-						System.out.println(values.get(i).getText());
 					} else {
 						calc.resetDisplay(); // otherwise clear the screen
 						calc.receiveKeyValue(values.get(i).getText()); // then
@@ -197,12 +196,8 @@ public class Base4Panel extends JPanel implements Observer {
 																		// was
 																		// clicked
 						operClicked = false;
-						System.out.println(values.get(i).getText());
-
 					}
-
 				}
-
 			}
 
 			for (int i = 0; i < operation.size(); i++) {
@@ -212,9 +207,6 @@ public class Base4Panel extends JPanel implements Observer {
 																											// these
 																											// operations
 						showValue = true;
-						System.out.println(display.getText());
-						System.out.println(currentBase);
-						// mode.setParameterB(display.getText());
 						mode.setParameterB(calc.getEquation()); // store the
 																// first input
 						mode.setCurrentoper(operation.get(i).getText()); // and
@@ -222,14 +214,19 @@ public class Base4Panel extends JPanel implements Observer {
 																			// first
 																			// operation
 
-						System.out.println("+");
-						operClicked = true;
 						operCounter++;
 						if (operCounter > 1) { // if an operation has already
 												// been clicked before i.e. the
 												// controller does not rely on
-												// the '=' button to calculate
-							System.out.println(mode.toString());
+												// the '=' button to calculate.
+												// Note that this allows for
+												// continuation of calculations
+												// on the operations rather than
+												// the '=' button. For example
+												// "2++" displays "4" as the
+												// output in base 10. Another example is
+												// "8-2--" and that displays "4" as
+												// the output in base 10. This feature does not work on the '=' button.
 							calc.getInput(mode, currentBase);// send both inputs
 																// and the
 																// currentBase
@@ -269,11 +266,11 @@ public class Base4Panel extends JPanel implements Observer {
 																		// input
 							mode.setOper1(mode.getCurrentoper());
 						}
+						operClicked = true;
 					}
 
 					if (operation.get(i).getText() == "CL") {
 						showValue = false;
-						System.out.println("CL");
 						calc.resetDisplay();
 						operCounter = 0;
 						calc.clear();
@@ -281,7 +278,6 @@ public class Base4Panel extends JPanel implements Observer {
 					}
 
 					if (operation.get(i).getText() == "=") {
-						System.out.println("=");
 						if (operCounter == 0) { // if there an operation other
 												// than '=' and 'CL' has not
 												// been clicked
