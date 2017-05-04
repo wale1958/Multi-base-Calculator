@@ -15,33 +15,54 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+/**
+ * Base4Panel functions as the view of this project. It declares the buttons,
+ * Label, Slider, calculator model and it's observable {@link Base4CalcState}.
+ * It is responsible for the layout and the display of the calculator.
+ * 
+ * 
+ * @author Adebowale Ojetola
+ * @version %I%, %G%
+ * @since 1.0
+ *
+ */
 public class Base4Panel extends JPanel implements Observer {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1551518459395937415L;
+	private static final long serialVersionUID = -1551518459395937415L; // required
+																		// for a
+																		// subclass
+																		// of
+																		// JPanel
 
 	public static final int defaultBase = 10;
 	public static final int maxBase = 16;
 	public static final int minBase = 2;
 
-	private Base4CalcState calc; // this object will
-									// actually do the
-									// calculating work
-	private ArrayList<JButton> values;
-	private ArrayList<JButton> operation;
+	private Base4CalcState calc; // does the calculating work
+	private ArrayList<JButton> values; // holds integer values 0-9
+	private ArrayList<JButton> operation; // holds operations
 
-	private CalculatorModel mode;
-	private JLabel display;
-	private JSlider baseSlider;
+	private CalculatorModel mode; // observable
+	private JLabel display; // displays the buttons clicked and calculation
+	private JSlider baseSlider; // used to set the base
 
 	private int currentBase;
-	private boolean postOperAction = false;
-	private int operCounter = 0;
-	private boolean showValue = false;
+	private boolean operClicked = false; // used to replace the input clicked on
+											// the label after an operation is
+											// clicked. To separate first input
+											// from the second
+	private int operCounter = 0; // used to determine when a calculation should
+									// be made which is after any of the
+									// operations except clear has been clicked
+									// more than once.
+	private boolean showValue = false; // used to determine if an input should
+										// be shown or a calculation
 
-	String displayText;
-
+	/**
+	 * Sets up the layout, buttons and slider.
+	 * 
+	 * @param cal
+	 *            observable reverence value created in {@link Base4Calculator}
+	 */
 	Base4Panel(Base4CalcState cal) {
 
 		display = new JLabel();
@@ -76,7 +97,7 @@ public class Base4Panel extends JPanel implements Observer {
 
 		display.setVisible(true);
 		display.setSize(250, 15);
-		display.setBackground(Color.BLACK);
+		display.setForeground(Color.RED);
 		display.setFont(new Font("Default", Font.BOLD, 30));
 		disPanel.add(display);
 
@@ -92,8 +113,9 @@ public class Base4Panel extends JPanel implements Observer {
 			public void stateChanged(ChangeEvent e) {
 
 				currentBase = ((JSlider) e.getSource()).getValue();
-				updateButtons(currentBase);
-				calc.setBase(currentBase);
+				updateButtons(currentBase); // disable/enable buttons as the
+											// slider moves
+				calc.setBase(currentBase); // update the model
 
 			}
 		});
@@ -104,15 +126,14 @@ public class Base4Panel extends JPanel implements Observer {
 		this.add(buttonLayout);
 		this.add(sliderPanel);
 
-		// do you need any other layout elements?
-
-		// you may decide you want to improve the appearance of the layout,
-		// which is fine. But defer that until you get the calculator working.
-		// (You can spend HOURS messing with layout, which is not the point of
-		// this exercise!)
-
 	}
 
+	/**
+	 * Updates the buttons as the slider moves
+	 * 
+	 * @param currentBase
+	 *            holds the current base the slider is on
+	 */
 	public void updateButtons(int currentBase) {
 		for (int i = 0; i < values.size(); i++) {
 			if (Integer.parseInt(values.get(i).getText(), maxBase) < currentBase) {
@@ -123,21 +144,59 @@ public class Base4Panel extends JPanel implements Observer {
 		}
 	}
 
-	class buttonListener implements ActionListener {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 * Decides whether the calculation or input should be displayed
+	 */
+	@Override
+	public void update(Observable o, Object arg) {
+		if (!showValue) {
+			display.setText(((Base4CalcState) o).getEquation());
+		} else {
+			display.setText(((Base4CalcState) o).currentValue());
+		}
 
+	}
+
+	/**
+	 * buttonListener functions as the as the controller. It decides when to
+	 * calculate, what value to be sent to the model and what to do when an
+	 * operation is clicked.
+	 * 
+	 * @author Adebowale Ojetola
+	 * @version %I%, %G%
+	 * @since 1.0
+	 *
+	 */
+	class buttonListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
 
 			for (int i = 0; i < values.size(); i++) {
 
 				if (event.getSource() == values.get(i)) {
 					showValue = false;
-					if (!postOperAction) {
-						calc.receiveKeyValue(values.get(i).getText());
+					if (!operClicked) { // if an operation hasn't been clicked
+						calc.receiveKeyValue(values.get(i).getText()); // tell
+																		// the
+																		// model
+																		// what
+																		// button
+																		// was
+																		// clicked
 						System.out.println(values.get(i).getText());
 					} else {
-						calc.resetDisplay();
-						calc.receiveKeyValue(values.get(i).getText());
-						postOperAction = false;
+						calc.resetDisplay(); // otherwise clear the screen
+						calc.receiveKeyValue(values.get(i).getText()); // then
+																		// tell
+																		// the
+																		// model
+																		// what
+																		// button
+																		// was
+																		// clicked
+						operClicked = false;
 						System.out.println(values.get(i).getText());
 
 					}
@@ -149,24 +208,65 @@ public class Base4Panel extends JPanel implements Observer {
 			for (int i = 0; i < operation.size(); i++) {
 				if (event.getSource() == operation.get(i)) {
 					if (operation.get(i).getText() == "+" || operation.get(i).getText() == "-"
-							|| operation.get(i).getText() == "*" || operation.get(i).getText() == "/") {
+							|| operation.get(i).getText() == "*" || operation.get(i).getText() == "/") { // for
+																											// these
+																											// operations
 						showValue = true;
 						System.out.println(display.getText());
 						System.out.println(currentBase);
-						//mode.setParameterB(display.getText());
-						mode.setParameterB(calc.getEquation());
-						mode.setCurrentoper(operation.get(i).getText());
+						// mode.setParameterB(display.getText());
+						mode.setParameterB(calc.getEquation()); // store the
+																// first input
+						mode.setCurrentoper(operation.get(i).getText()); // and
+																			// the
+																			// first
+																			// operation
 
 						System.out.println("+");
-						postOperAction = true;
+						operClicked = true;
 						operCounter++;
-						if (operCounter > 1) {
+						if (operCounter > 1) { // if an operation has already
+												// been clicked before i.e. the
+												// controller does not rely on
+												// the '=' button to calculate
 							System.out.println(mode.toString());
-							calc.getInput(mode, currentBase);
-							mode.setParameterA(calc.getValue());
+							calc.getInput(mode, currentBase);// send both inputs
+																// and the
+																// currentBase
+																// to the model
+																// to calculate
+							mode.setParameterA(calc.currentValue()); // set the
+																		// first
+																		// input
+																		// to
+																		// the
+																		// calculated
+																		// value
+																		// in
+																		// the
+																		// case
+																		// that
+																		// the
+																		// user
+																		// wants
+																		// to
+																		// use
+																		// that
+																		// value
+																		// in
+																		// the
+																		// next
+																		// calculation
 							mode.setOper1(mode.getCurrentoper());
 						} else {
-							mode.setParameterA(mode.getParameterB());
+							mode.setParameterA(mode.getParameterB());// otherwise
+																		// save
+																		// the
+																		// integer
+																		// as
+																		// the
+																		// first
+																		// input
 							mode.setOper1(mode.getCurrentoper());
 						}
 					}
@@ -182,30 +282,26 @@ public class Base4Panel extends JPanel implements Observer {
 
 					if (operation.get(i).getText() == "=") {
 						System.out.println("=");
-						showValue = true;
-						operCounter++;
-						mode.setParameterB(calc.getEquation());
-						calc.getInput(mode, currentBase);
-						postOperAction = true;
+						if (operCounter == 0) { // if there an operation other
+												// than '=' and 'CL' has not
+												// been clicked
+							showValue = false; // don't calculate or show
+												// anything other than the input
+						} else {
+							showValue = true;
+							operCounter++;
+							mode.setParameterB(calc.getEquation());// otherwise
+																	// store the
+																	// second
+																	// input
+							calc.getInput(mode, currentBase);// and calculate
+							operClicked = true;
+						}
 					}
 				}
 			}
 
-			// you need to deal with event handling. before you go too crazy
-			// writing code,
-			// think about when the calc object needs to be involved, and when
-			// it doesn't
-
 		}
 	}
 
-	@Override
-	public void update(Observable o, Object arg) {
-		if (!showValue) {
-			display.setText(((Base4CalcState) o).getEquation());
-		} else {
-			display.setText(((Base4CalcState) o).getValue());
-		}
-
-	}
 }
